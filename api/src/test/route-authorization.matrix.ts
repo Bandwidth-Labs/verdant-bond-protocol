@@ -11,6 +11,7 @@ import { OracleController } from '../oracle/oracle.controller';
 import { ProjectsController } from '../projects/projects.controller';
 import { MarketplaceController } from '../marketplace/marketplace.controller';
 import { ValuationController } from '../valuation/valuation.controller';
+import { IntentReceiptController } from '../intent-receipts/intent-receipt.controller';
 
 /**
  * Single source of truth for the API route authorization matrix (issue #X part 1).
@@ -138,4 +139,12 @@ export const ROUTE_AUTHORIZATION_MATRIX: RouteAuthEntry[] = [
   { controller: MarketplaceController, method: 'repairReconciliation', httpMethod: 'POST', path: 'marketplace/reconciliation/repair', guards: [], role: 'wallet-header', mutation: true },
   // ---- Valuations (#204) ----
   { controller: ValuationController, method: 'getValuations', httpMethod: 'GET', path: 'valuations', guards: [], role: 'public', mutation: false },
+  // ---- Maintainer intent receipts (review surface; read-only + reviews) ----
+  { controller: IntentReceiptController, method: 'list', httpMethod: 'GET', path: 'admin/intent-receipts', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'stats', httpMethod: 'GET', path: 'admin/intent-receipts/stats', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'signingKey', httpMethod: 'GET', path: 'admin/intent-receipts/signing-key', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'verifyExported', httpMethod: 'POST', path: 'admin/intent-receipts/verify', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'get', httpMethod: 'GET', path: 'admin/intent-receipts/:id', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'verify', httpMethod: 'GET', path: 'admin/intent-receipts/:id/verify', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: false },
+  { controller: IntentReceiptController, method: 'review', httpMethod: 'POST', path: 'admin/intent-receipts/:id/reviews', guards: [JwtAuthGuard, AdminGuard], role: 'admin', mutation: true },
 ];
